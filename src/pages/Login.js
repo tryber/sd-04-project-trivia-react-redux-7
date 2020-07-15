@@ -20,7 +20,7 @@ class Login extends Component {
           placeholder="nome"
           // onChange={}
         />
-        <button data-testid="btn-play">Jogar!</button>
+        <button type="submit" data-testid="btn-play">Jogar!</button>
       </div>
     );
   }
