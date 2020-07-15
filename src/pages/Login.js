@@ -11,7 +11,7 @@ class Login extends Component {
           name="email"
           placeholder="email"
           // onChange={}
-          />
+        />
         <p>Nome:</p>
         <input
           type="text"
