@@ -34,7 +34,7 @@ class Login extends Component {
 
   renderInputEmail(email) {
     return (
-      <label>
+      <label htmlFor={email}>
         E-mail:
         <input
           type="email"
@@ -50,7 +50,7 @@ class Login extends Component {
 
   renderInputName(name) {
     return (
-      <label>
+      <label htmlFor={name}>
         Nome:
         <input
           type="text"
