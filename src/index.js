@@ -6,12 +6,11 @@ import './index.css';
 import store from './store';
 import App from './App';
 
-
 ReactDOM.render(
   <Provider store={store}>
     <Router>
       <App />
     </Router>
-  </Provider>, document.getElementById('root'),
+  </Provider>,
+  document.getElementById('root'),
 );
-
