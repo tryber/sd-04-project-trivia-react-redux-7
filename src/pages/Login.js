@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { requestAvatar } from '../actions';
+import PropTypes from 'prop-types';
+import { requestToken, requestQuestions, playerInfo } from '../actions';
+import GoToSettingsBtn from '../components/GoToSettingsBtn';
 
 class Login extends Component {
   constructor(props) {
@@ -9,11 +11,8 @@ class Login extends Component {
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangeNome = this.onChangeNome.bind(this);
     this.HabilitButton = this.HabilitButton.bind(this);
-  }
-
-  componentDidMount() {
-    const { getAvatar } = this.props;
-    getAvatar('ronanf.sk@gmail.com');
+    this.renderInputEmail = this.renderInputEmail.bind(this);
+    this.renderInputName = this.renderInputName.bind(this);
   }
 
   onChangeEmail(event) {
@@ -30,52 +29,75 @@ class Login extends Component {
 
   HabilitButton() {
     const { name, email } = this.state;
-    this.setState({ isDisabled: email === '' && name === '' ? true : false });
+    this.setState({ isDisabled: email === '' && name === '' });
+  }
+
+  renderInputEmail(email) {
+    return (
+      <label>
+        E-mail:
+        <input
+          type="email"
+          data-testid="input-gravatar-email"
+          name="email"
+          placeholder="email"
+          onChange={this.onChangeEmail}
+          value={email}
+        />
+      </label>
+    );
+  }
+
+  renderInputName(name) {
+    return (
+      <label>
+        Nome:
+        <input
+          type="text"
+          data-testid="input-player-name"
+          name="name"
+          placeholder="nome"
+          onChange={this.onChangeNome}
+          value={name}
+        />
+      </label>
+    );
   }
 
   render() {
     const { email, name, isDisabled } = this.state;
+    const { submitInfo } = this.props;
     return (
       <div>
-        <label>
-          E-mail:
-          <input
-            type="email"
-            data-testid="input-gravatar-email"
-            name="email"
-            placeholder="email"
-            onChange={this.onChangeEmail}
-            value={email}
-          />
-        </label>
-        <label>
-          Nome:
-          <input
-            type="text"
-            data-testid="input-player-name"
-            name="name"
-            placeholder="nome"
-            onChange={this.onChangeNome}
-            value={name}
-          />
-        </label>
-        <button data-testid="btn-play" disabled={isDisabled}>
-          {' '}
+        <GoToSettingsBtn />
+        {this.renderInputEmail(email)}
+        {this.renderInputName(name)}
+        <button
+          onClick={() => submitInfo(email, name)}
+          type="button"
+          data-testid="btn-play"
+          disabled={isDisabled}
+        >
           Jogar!
         </button>
-        <img src={this.props.url} alt="aaaaaa" />
       </div>
     );
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getAvatar: (email) => dispatch(requestAvatar(email)),
+  getToken: () => dispatch(requestToken()),
+  getQuestions: (data) => dispatch(requestQuestions(data)),
+  submitInfo: (email, name) => dispatch(playerInfo(email, name)),
 });
 
 const mapStateToProps = (state) => ({
-  url: state.dataAvatar,
+  url: state.gravatarReducer.avatarUrl,
 });
+
+Login.propTypes = {
+  submitInfo: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
 // export default Login;
