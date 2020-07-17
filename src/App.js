@@ -6,7 +6,9 @@ import Login from './pages/Login';
 import Settings from './pages/Settings';
 import Rank from './pages/Rank';
 
+
 export default function App() {
+
   return (
     <Switch>
       <Route exact path="/game" component={Game} />

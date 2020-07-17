@@ -56,7 +56,7 @@ export function requestQuestions(token) {
 export function requestToken() {
   return (dispatch) => {
     dispatch(requestApi());
-
+    console.log('ola mundo!!')
     return getToken().then(
       (data) => dispatch(requestApiSucccessToken(data.token)),
       (error) => dispatch(requestApiErrorToken(error)),
