@@ -1,29 +1,90 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { playerInfo } from '../actions';
+import GoToSettingsBtn from '../components/GoToSettingsBtn';
 
 class Login extends Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = { email: '', name: '' };
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangeNome = this.onChangeNome.bind(this);
+    this.renderInputEmail = this.renderInputEmail.bind(this);
+    this.renderInputName = this.renderInputName.bind(this);
+  }
+
+  onChangeEmail(event) {
+    const { value } = event.target;
+    this.setState({ email: value });
+  }
+
+  onChangeNome(event) {
+    const { value } = event.target;
+    this.setState({ name: value });
+  }
+
+  renderInputEmail(email) {
     return (
-      <div>
-        <p>E-mail:</p>
+      <label htmlFor={email}>
+        E-mail:
         <input
           type="email"
           data-testid="input-gravatar-email"
           name="email"
           placeholder="email"
-          // onChange={}
+          onChange={this.onChangeEmail}
+          value={email}
         />
-        <p>Nome:</p>
+      </label>
+    );
+  }
+
+  renderInputName(name) {
+    return (
+      <label htmlFor={name}>
+        Nome:
         <input
           type="text"
           data-testid="input-player-name"
           name="name"
           placeholder="nome"
-          // onChange={}
+          onChange={this.onChangeNome}
+          value={name}
         />
-        <button type="submit" data-testid="btn-play">Jogar!</button>
+      </label>
+    );
+  }
+
+  render() {
+    const { email, name } = this.state;
+    const { submitInfo } = this.props;
+    const isDisabled = email === '' || name === '';
+    // /\ linha 62 para corrigir o bug no disabled e passar no teste
+    return (
+      <div>
+        <GoToSettingsBtn />
+        {this.renderInputEmail(email)}
+        {this.renderInputName(name)}
+        <button
+          onClick={() => submitInfo(email, name)}
+          type="button"
+          data-testid="btn-play"
+          disabled={isDisabled}
+        >
+          Jogar!
+        </button>
       </div>
     );
   }
 }
 
-export default Login;
+const mapDispatchToProps = (dispatch) => ({
+  submitInfo: (email, name) => dispatch(playerInfo(email, name)),
+});
+
+Login.propTypes = {
+  submitInfo: PropTypes.func.isRequired,
+};
+
+export default connect(null, mapDispatchToProps)(Login);
