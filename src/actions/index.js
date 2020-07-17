@@ -5,8 +5,28 @@ export const REQUEST_API_SUCCESS_TOKEN = 'REQUEST_API_SUCCESS_TOKEN';
 export const REQUEST_API_SUCCESS_QUESTIONS = 'REQUEST_API_SUCCESS_QUESTIONS';
 export const REQUEST_API_ERROR_TOKEN = 'REQUEST_API_ERROR_TOKEN';
 export const REQUEST_API_ERROR_QUESTIONS = 'REQUEST_API_ERROR_QUESTIONS';
+export const TIME_MANAGEMENT = 'TIME_MANAGEMENT';
+export const COUNTDOWN = 'COUNTDOWN';
 export const PLAYER_INFO = 'PLAYER_INFO';
 const crypto = require('crypto');
+
+// const countdown = (time) => {
+//   const newTime = time - 1;
+//   console.log('countdown', newTime);
+//   return {
+//     type: COUNTDOWN,
+//     newTime,
+//   };
+// };
+
+// export const timeManagement = (time) => {
+//   const setIntervalId = setInterval(countdown(time), 1000);
+//   console.log('timeManagement', setIntervalId);
+//   return {
+//     type: TIME_MANAGEMENT,
+//     setIntervalId,
+//   };
+// };
 
 export const playerInfo = (email, name) => {
   const hash = crypto.createHash('md5').update(email).digest('hex');
