@@ -77,14 +77,14 @@ class Login extends Component {
         {this.renderInputName(name)}
 
         <button
-          onClick={this.onClickRequest()}
+          onClick={() => this.onClickRequest()}
           type="button"
           data-testid="btn-play"
           disabled={isDisabled}
         >
-          {/* <Link to="/game"> */}
+          <Link to="/game">
             Jogar!
-            {/* </Link> */}
+            </Link>
         </button>
       </div>
     );
