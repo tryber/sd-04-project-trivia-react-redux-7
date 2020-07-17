@@ -1,7 +1,7 @@
 import { REQUEST_API, REQUEST_API_SUCCESS_TOKEN, REQUEST_API_ERROR_TOKEN } from '../actions';
 
 const INICIAL_STATE = {
-  dataToken: {},
+  dataToken: '',
   isLoading: false,
   errorToken: '',
 };

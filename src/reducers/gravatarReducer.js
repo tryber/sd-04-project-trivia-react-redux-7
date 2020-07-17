@@ -6,7 +6,6 @@ const INICIAL_STATE = {
 };
 
 const gravatarReducer = (state = INICIAL_STATE, action) => {
-  console.log(action.token);
   switch (action.type) {
     case PLAYER_INFO:
       return {

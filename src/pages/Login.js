@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { requestToken, requestQuestions, playerInfo } from '../actions';
+import { playerInfo } from '../actions';
 import GoToSettingsBtn from '../components/GoToSettingsBtn';
 
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { email: '', name: '', isDisabled: true };
+    this.state = { email: '', name: '' };
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangeNome = this.onChangeNome.bind(this);
-    this.HabilitButton = this.HabilitButton.bind(this);
     this.renderInputEmail = this.renderInputEmail.bind(this);
     this.renderInputName = this.renderInputName.bind(this);
   }
@@ -18,18 +17,11 @@ class Login extends Component {
   onChangeEmail(event) {
     const { value } = event.target;
     this.setState({ email: value });
-    this.HabilitButton();
   }
 
   onChangeNome(event) {
     const { value } = event.target;
     this.setState({ name: value });
-    this.HabilitButton();
-  }
-
-  HabilitButton() {
-    const { name, email } = this.state;
-    this.setState({ isDisabled: email === '' && name === '' });
   }
 
   renderInputEmail(email) {
@@ -65,8 +57,10 @@ class Login extends Component {
   }
 
   render() {
-    const { email, name, isDisabled } = this.state;
+    const { email, name } = this.state;
     const { submitInfo } = this.props;
+    const isDisabled = email === '' || name === '';
+    // /\ linha 62 para corrigir o bug no disabled e passar no teste
     return (
       <div>
         <GoToSettingsBtn />
@@ -86,18 +80,11 @@ class Login extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getToken: () => dispatch(requestToken()),
-  getQuestions: (data) => dispatch(requestQuestions(data)),
   submitInfo: (email, name) => dispatch(playerInfo(email, name)),
-});
-
-const mapStateToProps = (state) => ({
-  url: state.gravatarReducer.avatarUrl,
 });
 
 Login.propTypes = {
   submitInfo: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
-// export default Login;
+export default connect(null, mapDispatchToProps)(Login);
