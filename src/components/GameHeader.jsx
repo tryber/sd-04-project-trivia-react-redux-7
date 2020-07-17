@@ -8,10 +8,8 @@ class GameHeader extends Component {
     console.log(name, score, avatarUrl);
     return (
       <div className="game-header">
-        <div className="game-header-avatar">
-          {avatarUrl}
-          <img src={avatarUrl} alt="/" data-testid="header-profile-picture" />
-        </div>
+        {avatarUrl}
+        <img src={avatarUrl} alt="/" data-testid="header-profile-picture" />
         <div className="game-header-name" data-testid="header-player-name">
           {`Player Name: ${name}`}
         </div>

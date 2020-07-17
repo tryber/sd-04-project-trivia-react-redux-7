@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { playerInfo } from '../actions';
 import GoToSettingsBtn from '../components/GoToSettingsBtn';
@@ -66,14 +67,16 @@ class Login extends Component {
         <GoToSettingsBtn />
         {this.renderInputEmail(email)}
         {this.renderInputName(name)}
-        <button
-          onClick={() => submitInfo(email, name)}
-          type="button"
-          data-testid="btn-play"
-          disabled={isDisabled}
-        >
-          Jogar!
-        </button>
+        <Link to="/game">
+          <button
+            onClick={() => submitInfo(email, name)}
+            type="button"
+            data-testid="btn-play"
+            disabled={isDisabled}
+          >
+            Jogar!
+          </button>
+        </Link>
       </div>
     );
   }
