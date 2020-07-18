@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { playerInfo } from '../actions';
+import { playerInfo, requestToken } from '../actions';
 import GoToSettingsBtn from '../components/GoToSettingsBtn';
 
 class Login extends Component {
@@ -13,6 +13,7 @@ class Login extends Component {
     this.onChangeNome = this.onChangeNome.bind(this);
     this.renderInputEmail = this.renderInputEmail.bind(this);
     this.renderInputName = this.renderInputName.bind(this);
+    this.onClickRequest = this.onClickRequest.bind(this);
   }
 
   onChangeEmail(event) {
@@ -23,6 +24,13 @@ class Login extends Component {
   onChangeNome(event) {
     const { value } = event.target;
     this.setState({ name: value });
+  }
+
+  onClickRequest() {
+    const { email, name } = this.state;
+    const { submitInfo, getToken } = this.props;
+    submitInfo(email, name);
+    getToken();
   }
 
   renderInputEmail(email) {
@@ -59,7 +67,6 @@ class Login extends Component {
 
   render() {
     const { email, name } = this.state;
-    const { submitInfo } = this.props;
     const isDisabled = email === '' || name === '';
     // /\ linha 62 para corrigir o bug no disabled e passar no teste
     return (
@@ -67,15 +74,16 @@ class Login extends Component {
         <GoToSettingsBtn />
         {this.renderInputEmail(email)}
         {this.renderInputName(name)}
+
         <Link to="/game">
           <button
-            onClick={() => submitInfo(email, name)}
+            onClick={() => this.onClickRequest()}
             type="button"
             data-testid="btn-play"
             disabled={isDisabled}
           >
             Jogar!
-          </button>
+        </button>
         </Link>
       </div>
     );
@@ -84,10 +92,12 @@ class Login extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   submitInfo: (email, name) => dispatch(playerInfo(email, name)),
+  getToken: () => dispatch(requestToken()),
 });
 
 Login.propTypes = {
   submitInfo: PropTypes.func.isRequired,
+  getToken: PropTypes.func.isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Login);
