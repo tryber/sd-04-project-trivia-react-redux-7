@@ -10,24 +10,6 @@ export const COUNTDOWN = 'COUNTDOWN';
 export const PLAYER_INFO = 'PLAYER_INFO';
 const crypto = require('crypto');
 
-// const countdown = (time) => {
-//   const newTime = time - 1;
-//   console.log('countdown', newTime);
-//   return {
-//     type: COUNTDOWN,
-//     newTime,
-//   };
-// };
-
-// export const timeManagement = (time) => {
-//   const setIntervalId = setInterval(countdown(time), 1000);
-//   console.log('timeManagement', setIntervalId);
-//   return {
-//     type: TIME_MANAGEMENT,
-//     setIntervalId,
-//   };
-// };
-
 export const playerInfo = (email, name) => {
   const hash = crypto.createHash('md5').update(email).digest('hex');
   return {
