@@ -28,10 +28,9 @@ class Login extends Component {
 
   onClickRequest() {
     const { email, name } = this.state;
-    const { submitInfo, requestToken } = this.props;
+    const { submitInfo, getToken } = this.props;
     submitInfo(email, name);
-    requestToken();
-    console.log('Request Onclick')
+    getToken();
   }
 
   renderInputEmail(email) {
@@ -93,12 +92,12 @@ class Login extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   submitInfo: (email, name) => dispatch(playerInfo(email, name)),
-  requestToken: () => dispatch(requestToken()),
+  getToken: () => dispatch(requestToken()),
 });
 
 Login.propTypes = {
   submitInfo: PropTypes.func.isRequired,
-  requestToken: PropTypes.func.isRequired,
+  getToken: PropTypes.func.isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Login);
