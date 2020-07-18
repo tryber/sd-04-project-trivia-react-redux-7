@@ -14,7 +14,6 @@ const tokenReducer = (state = INICIAL_STATE, action) => {
         isLoading: true,
       };
     case REQUEST_API_SUCCESS_TOKEN:
-      console.log(action.token);
       return {
         ...state,
         dataToken: action.token,
