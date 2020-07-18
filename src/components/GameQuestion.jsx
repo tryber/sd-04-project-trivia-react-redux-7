@@ -58,23 +58,20 @@ class GameQuestion extends Component {
       if (answer === correct_answer) return <button data-testid="correct-answer">{answer}</button>
       return <button data-testid={`wrong-answer-${indexOf(answer)}`}>{answer}</button>
       });
+    return renderBtn;
     }
   }
 
   render() {
     const { questionsApiData } = this.props;
-    const {
-      category, question, correct_answer,
-      incorrect_answer, type, difficulty,
-    } = questionsApiData;
+    const { category, question, correct_answer, incorrect_answer} = questionsApiData;
     return (
       <div className="game-question">
         {this.renderCategoryText(category)}
         {this.renderQuestionText(question)}
         {this.renderAnswerButton(correct_answer, incorrect_answer)}
       </div>
-    );
+    )
   }
-}
 
 export default GameQuestion;
