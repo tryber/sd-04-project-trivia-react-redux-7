@@ -1,5 +1,5 @@
 import {
-  REQUEST_API,
+  REQUEST_API_QUESTIONS,
   REQUEST_API_SUCCESS_QUESTIONS,
   REQUEST_API_ERROR_QUESTIONS,
 } from '../actions';
@@ -12,7 +12,7 @@ const INICIAL_STATE = {
 
 const questionsReducer = (state = INICIAL_STATE, action) => {
   switch (action.type) {
-    case REQUEST_API:
+    case REQUEST_API_QUESTIONS:
       return {
         ...state,
         isLoading: true,

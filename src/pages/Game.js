@@ -6,11 +6,6 @@ import Questions from '../components/Questions';
 
 class Game extends Component {
 
-  componentDidMount() {
-    const { dataToken } = this.props;
-    localStorage.setItem('token', dataToken);
-  }
-
   render() {
     const { isLoading } = this.props;
     return (
@@ -32,5 +27,3 @@ Game.propTypes = {
   dataToken: PropTypes.string.isRequired,
   isLoading: PropTypes.bool.isRequired,
 };
-
-// export default Game;

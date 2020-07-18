@@ -1,6 +1,7 @@
 import { getQuestions, getToken } from '../services/apis';
 
-export const REQUEST_API = 'REQUEST_API';
+export const REQUEST_API_TOKEN = 'REQUEST_API_TOKEN';
+export const REQUEST_API_QUESTIONS = 'REQUEST_API_QUESTIONS';
 export const REQUEST_API_SUCCESS_TOKEN = 'REQUEST_API_SUCCESS_TOKEN';
 export const REQUEST_API_SUCCESS_QUESTIONS = 'REQUEST_API_SUCCESS_QUESTIONS';
 export const REQUEST_API_ERROR_TOKEN = 'REQUEST_API_ERROR_TOKEN';
@@ -17,8 +18,12 @@ export const playerInfo = (email, name) => {
   };
 };
 
-const requestApi = () => ({
-  type: REQUEST_API,
+const requestApiToken = () => ({
+  type: REQUEST_API_TOKEN,
+});
+
+const requestApiQuestions = () => ({
+  type: REQUEST_API_QUESTIONS,
 });
 
 const requestApiSucccessToken = (token) => ({
@@ -44,7 +49,7 @@ const requestApiErrorQuestions = (error) => ({
 export function requestQuestions(token) {
   return (dispatch) => {
     // thunk
-    dispatch(requestApi());
+    dispatch(requestApiQuestions());
 
     return getQuestions(token).then(
       (data) => dispatch(requestApiSucccessQuestions(data.results)),
@@ -55,7 +60,7 @@ export function requestQuestions(token) {
 
 export function requestToken() {
   return (dispatch) => {
-    dispatch(requestApi());
+    dispatch(requestApiToken());
     return getToken().then(
       (data) => dispatch(requestApiSucccessToken(data.token)),
       (error) => dispatch(requestApiErrorToken(error)),
