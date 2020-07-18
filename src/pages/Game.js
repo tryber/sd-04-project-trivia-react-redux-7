@@ -24,6 +24,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps)(Game);
 
 Game.propTypes = {
-  dataToken: PropTypes.string.isRequired,
   isLoading: PropTypes.bool.isRequired,
 };
