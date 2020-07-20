@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes, { object, array } from 'prop-types';
+import { requestQuestions } from '../actions'; // actionCreate retorna uma tunk
 
 class GameQuestion extends Component {
   constructor(props) {
@@ -11,6 +13,12 @@ class GameQuestion extends Component {
     this.renderCategoryText = this.renderCategoryText.bind(this);
     this.renderQuestionText = this.renderQuestionText.bind(this);
     this.shuffleAnswer = this.shuffleAnswer.bind(this);
+  }
+
+  componentDidMount() {
+    const { token, getQuestions } = this.props;
+    localStorage.setItem('token', token);
+    getQuestions(token);
   }
 
   shuffleAnswer(array) {
@@ -34,7 +42,10 @@ class GameQuestion extends Component {
 
   renderCategoryText() {
     const { dataQuestion } = this.props;
-    const { category } = dataQuestion;
+    console.log(dataQuestion);
+
+    const { category } = dataQuestion[0];
+    console.log(category);
     return (
       <div className="game-question-category">
         <h2 data-testid="question-category">
@@ -46,7 +57,7 @@ class GameQuestion extends Component {
 
   renderQuestionText() {
     const { dataQuestion } = this.props;
-    const { question } = dataQuestion;
+    const { question } = dataQuestion[0];
     return (
       <div className="game-question-text">
         <p data-testid="question-text">
@@ -58,8 +69,9 @@ class GameQuestion extends Component {
 
   renderAnswerButton() {
     const { dataQuestion } = this.props;
-    const { correct_answer, incorrect_answer } = dataQuestion;
-    const allAnswers = [...correct_answer, ...incorrect_answer];
+    const { correct_answer, incorrect_answers } = dataQuestion[0];
+    console.log(correct_answer, incorrect_answers);
+    const allAnswers = [correct_answer, ...incorrect_answers];
     const shuffledAnswers = this.shuffleAnswer(allAnswers);
 
     const renderBtn = shuffledAnswers.map((answer) => {
@@ -71,12 +83,12 @@ class GameQuestion extends Component {
 
   render() {
     const { dataQuestion } = this.props;
-    console.log(dataQuestion);
+    if (dataQuestion.length === 0) return <p>loading...</p>;
     return (
       <div className="game-question">
         {this.renderCategoryText()}
         {this.renderQuestionText()}
-        {/* {this.renderAnswerButton()} */}
+        {this.renderAnswerButton()}
       </div>
     );
   }
@@ -84,6 +96,30 @@ class GameQuestion extends Component {
 
 const mapStateToProps = (state) => ({
   dataQuestion: state.questionsReducer.dataQuestions,
+  token: state.tokenReducer.dataToken,
 });
 
-export default connect(mapStateToProps)(GameQuestion);
+const mapDispatchToProps = (dispatch) => ({
+  getQuestions: (token) => dispatch(requestQuestions(token)),
+});
+
+GameQuestion.defaultProps = {
+  dataQuestion: array,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(GameQuestion);
+
+GameQuestion.propTypes = {
+  token: PropTypes.string.isRequired,
+  getQuestions: PropTypes.func.isRequired,
+  dataQuestion: PropTypes.arrayOf(
+    PropTypes.shape({
+      category: PropTypes.string,
+      type: PropTypes.string,
+      difficulty: PropTypes.string,
+      question: PropTypes.string,
+      correct_answer: PropTypes.string,
+      incorrect_answers: PropTypes.arrayOf(PropTypes.string),
+    }),
+  ),
+};
