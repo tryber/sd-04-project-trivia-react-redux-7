@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PropTypes, { object, array } from 'prop-types';
+import PropTypes, { allAnswers } from 'prop-types';
 import { requestQuestions } from '../actions'; // actionCreate retorna uma tunk
 
 class GameQuestion extends Component {
@@ -21,8 +21,12 @@ class GameQuestion extends Component {
     getQuestions(token);
   }
 
-  shuffleAnswer(array) {
-    let currentIndex = array.length; let temporaryValue; let
+  shuffleAnswer() {
+    const { dataQuestion } = this.props;
+    const { correct_answer, incorrect_answers } = dataQuestion[0];
+    const allAnswers = [correct_answer, ...incorrect_answers];
+
+    let currentIndex = allAnswers.length; let temporaryValue; let
       randomIndex;
 
     // While there remain elements to shuffle...
@@ -32,12 +36,12 @@ class GameQuestion extends Component {
       currentIndex -= 1;
 
       // And swap it with the current element.
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
+      temporaryValue = allAnswers[currentIndex];
+      allAnswers[currentIndex] = allAnswers[randomIndex];
+      allAnswers[randomIndex] = temporaryValue;
     }
 
-    return array;
+    return allAnswers;
   }
 
   renderCategoryText() {
@@ -71,10 +75,9 @@ class GameQuestion extends Component {
     const { dataQuestion } = this.props;
     const { correct_answer, incorrect_answers } = dataQuestion[0];
     console.log(correct_answer, incorrect_answers);
-    const allAnswers = [correct_answer, ...incorrect_answers];
-    const shuffledAnswers = this.shuffleAnswer(allAnswers);
+    const allAnswer = this.shuffleAnswer();
 
-    const renderBtn = shuffledAnswers.map((answer) => {
+    const renderBtn = allAnswer.map((answer) => {
       if (answer === correct_answer) return <button type="button" data-testid="correct-answer">{answer}</button>;
       return <button type="button" data-testid="wrong-answer">{answer}</button>;
     });
@@ -104,7 +107,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 GameQuestion.defaultProps = {
-  dataQuestion: array,
+  dataQuestion: allAnswers,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameQuestion);
@@ -119,7 +122,7 @@ GameQuestion.propTypes = {
       difficulty: PropTypes.string,
       question: PropTypes.string,
       correct_answer: PropTypes.string,
-      incorrect_answers: PropTypes.arrayOf(PropTypes.string),
+      // incorrect_answers: PropTypes.allAnswersOf(PropTypes.string),
     }),
   ),
 };
