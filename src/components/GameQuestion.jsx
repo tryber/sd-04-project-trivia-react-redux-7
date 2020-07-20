@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PropTypes, { allAnswers } from 'prop-types';
+import PropTypes from 'prop-types';
 import { requestQuestions } from '../actions'; // actionCreate retorna uma tunk
 
 class GameQuestion extends Component {
