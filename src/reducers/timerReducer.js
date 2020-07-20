@@ -1,21 +1,17 @@
-import { COUNTDOWN, TIME_MANAGEMENT } from '../actions';
+import { TIMEOUT } from '../actions';
 
 const INITIAL_STATE = {
   time: 30,
   setIntervalId: '',
+  timeout: false,
 };
 
 const timeReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case TIME_MANAGEMENT:
+    case TIMEOUT:
       return {
         ...state,
-        setIntervalId: action.setIntervalId,
-      };
-    case COUNTDOWN:
-      return {
-        ...state,
-        time: action.newTime,
+        timeout: !state.timeout,
       };
     default:
       return state;

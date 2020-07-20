@@ -6,10 +6,13 @@ export const REQUEST_API_SUCCESS_TOKEN = 'REQUEST_API_SUCCESS_TOKEN';
 export const REQUEST_API_SUCCESS_QUESTIONS = 'REQUEST_API_SUCCESS_QUESTIONS';
 export const REQUEST_API_ERROR_TOKEN = 'REQUEST_API_ERROR_TOKEN';
 export const REQUEST_API_ERROR_QUESTIONS = 'REQUEST_API_ERROR_QUESTIONS';
-export const TIME_MANAGEMENT = 'TIME_MANAGEMENT';
-export const COUNTDOWN = 'COUNTDOWN';
+export const TIMEOUT = 'TIMEOUT';
 export const PLAYER_INFO = 'PLAYER_INFO';
 const crypto = require('crypto');
+
+export const timeout = () => ({
+  type: TIMEOUT,
+});
 
 export const playerInfo = (email, name) => {
   const hash = crypto.createHash('md5').update(email).digest('hex');

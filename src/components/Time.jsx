@@ -1,4 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { timeout } from '../actions';
 
 class Time extends React.Component {
   constructor(props) {
@@ -17,8 +20,10 @@ class Time extends React.Component {
 
   componentDidUpdate() {
     const { time, setIntervalId } = this.state;
+    const { timeIsOut } = this.props;
     if (time === 0) {
       clearInterval(setIntervalId);
+      timeIsOut();
     }
   }
 
@@ -37,4 +42,12 @@ class Time extends React.Component {
   }
 }
 
-export default Time;
+const mapDispatchToProps = (dispatch) => ({
+  timeIsOut: () => dispatch(timeout()),
+});
+
+Time.propTypes = {
+  timeIsOut: PropTypes.func.isRequired,
+};
+
+export default connect(null, mapDispatchToProps)(Time);
