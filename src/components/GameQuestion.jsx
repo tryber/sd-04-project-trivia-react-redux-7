@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class GameQuestion extends Component {
   constructor(props) {
@@ -13,65 +14,76 @@ class GameQuestion extends Component {
   }
 
   shuffleAnswer(array) {
-  let currentIndex = array.length, temporaryValue, randomIndex;
+    let currentIndex = array.length; let temporaryValue; let
+      randomIndex;
 
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
+    // While there remain elements to shuffle...
+    while (currentIndex !== 0) {
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
 
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
 
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
+    return array;
   }
 
-  return array;
-}
-
-  renderCategoryText(category) {
+  renderCategoryText() {
+    const { dataQuestion } = this.props;
+    const { category } = dataQuestion;
     return (
       <div className="game-question-category">
         <h2 data-testid="question-category">
-          {this.category}
+          {category}
         </h2>
       </div>
     );
   }
 
-  renderQuestionText(question) {
+  renderQuestionText() {
+    const { dataQuestion } = this.props;
+    const { question } = dataQuestion;
     return (
       <div className="game-question-text">
         <p data-testid="question-text">
-          {this.question}
+          {question}
         </p>
       </div>
     );
   }
 
-  renderAnswerButton(correct_answer, incorrect_answer) {
-    const allAnswers = [correct_answer, ...incorrect_answer]
+  renderAnswerButton() {
+    const { dataQuestion } = this.props;
+    const { correct_answer, incorrect_answer } = dataQuestion;
+    const allAnswers = [...correct_answer, ...incorrect_answer];
     const shuffledAnswers = this.shuffleAnswer(allAnswers);
-    const renderBtn =  shuffledAnswers.map((answer) => {  
-      if (answer === correct_answer) return <button data-testid="correct-answer">{answer}</button>
-      return <button data-testid={`wrong-answer-${indexOf(answer)}`}>{answer}</button>
-      });
+
+    const renderBtn = shuffledAnswers.map((answer) => {
+      if (answer === correct_answer) return <button type="button" data-testid="correct-answer">{answer}</button>;
+      return <button type="button" data-testid="wrong-answer">{answer}</button>;
+    });
     return renderBtn;
-    }
   }
 
   render() {
-    const { questionsApiData } = this.props;
-    const { category, question, correct_answer, incorrect_answer} = questionsApiData;
+    const { dataQuestion } = this.props;
+    console.log(dataQuestion);
     return (
       <div className="game-question">
-        {this.renderCategoryText(category)}
-        {this.renderQuestionText(question)}
-        {this.renderAnswerButton(correct_answer, incorrect_answer)}
+        {this.renderCategoryText()}
+        {this.renderQuestionText()}
+        {/* {this.renderAnswerButton()} */}
       </div>
-    )
+    );
   }
+}
 
-export default GameQuestion;
+const mapStateToProps = (state) => ({
+  dataQuestion: state.questionsReducer.dataQuestions,
+});
+
+export default connect(mapStateToProps)(GameQuestion);
