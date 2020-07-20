@@ -2,22 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import GameHeader from '../components/GameHeader';
-import Questions from '../components/Questions';
+import GameQuestion from '../components/GameQuestion';
 
 class Game extends Component {
-
   render() {
     const { isLoading } = this.props;
     return (
       <div>
         <GameHeader />
-        {isLoading ? 'Loading' : <Questions />}
+        {isLoading ? 'Loading' : <GameQuestion />}
+
       </div>
     );
   }
 }
 const mapStateToProps = (state) => ({
-  dataToken: state.tokenReducer.dataToken,
   isLoading: state.tokenReducer.isLoading,
 });
 
