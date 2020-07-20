@@ -1,4 +1,4 @@
-import { REQUEST_API, REQUEST_API_SUCCESS_TOKEN, REQUEST_API_ERROR_TOKEN } from '../actions';
+import { REQUEST_API_TOKEN, REQUEST_API_SUCCESS_TOKEN, REQUEST_API_ERROR_TOKEN } from '../actions';
 
 const INICIAL_STATE = {
   dataToken: '',
@@ -8,7 +8,7 @@ const INICIAL_STATE = {
 
 const tokenReducer = (state = INICIAL_STATE, action) => {
   switch (action.type) {
-    case REQUEST_API:
+    case REQUEST_API_TOKEN:
       return {
         ...state,
         isLoading: true,
