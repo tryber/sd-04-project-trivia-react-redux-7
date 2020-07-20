@@ -109,7 +109,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 GameQuestion.defaultProps = {
-  dataQuestion: allAnswers,
+  dataQuestion: Array,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameQuestion);
