@@ -75,10 +75,12 @@ class GameQuestion extends Component {
     const { dataQuestion } = this.props;
     const { correct_answer, incorrect_answers } = dataQuestion[0];
     console.log(correct_answer, incorrect_answers);
-    const allAnswer = this.shuffleAnswer();
+    const ShuffledAllAnswer = this.shuffleAnswer();
 
-    const renderBtn = allAnswer.map((answer) => {
-      if (answer === correct_answer) return <button type="button" data-testid="correct-answer">{answer}</button>;
+    const renderBtn = ShuffledAllAnswer.map((answer) => {
+      if (answer === correct_answer) {
+        return <button type="button" data-testid="correct-answer">{answer}</button>;
+      }
       return <button type="button" data-testid="wrong-answer">{answer}</button>;
     });
     return renderBtn;
@@ -122,7 +124,7 @@ GameQuestion.propTypes = {
       difficulty: PropTypes.string,
       question: PropTypes.string,
       correct_answer: PropTypes.string,
-      // incorrect_answers: PropTypes.allAnswersOf(PropTypes.string),
+      incorrect_answers: PropTypes.arrayOf(PropTypes.string),
     }),
   ),
 };
