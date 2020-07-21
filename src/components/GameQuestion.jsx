@@ -102,7 +102,15 @@ class GameQuestion extends Component {
     const renderBtn = ShuffledAllAnswer.map((answer, index) => {
       if (answer === correct_answer) {
         return (
-          <button key={answer} name={index} style={correctBorder} disabled={isAnswerClicked} type="button" data-testid="correct-answer" onClick={this.clickedAnswer}>
+          <button
+            key={answer}
+            name={index}
+            style={correctBorder}
+            disabled={isAnswerClicked}
+            type="button"
+            data-testid="correct-answer"
+            onClick={this.clickedAnswer}
+          >
             {answer}
           </button>
         );
