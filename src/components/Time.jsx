@@ -20,7 +20,7 @@ class Time extends React.Component {
   componentDidUpdate() {
     const { setIntervalId } = this.state;
     const { time } = this.props;
-    if (time === 0) {
+    if (time <= 0) {
       clearInterval(setIntervalId);
       console.log('clearInterval done');
     }
