@@ -1,16 +1,20 @@
 import { PLAYER_INFO } from '../actions';
 
 const INICIAL_STATE = {
+  assertions: 0,
+  score: 0,
   avatarUrl: '',
+  email: '',
   name: '',
 };
 
-const gravatarReducer = (state = INICIAL_STATE, action) => {
+const playerReducer = (state = INICIAL_STATE, action) => {
   switch (action.type) {
     case PLAYER_INFO:
       return {
         ...state,
         avatarUrl: action.url,
+        email: action.email,
         name: action.name,
       };
     default:
@@ -18,4 +22,4 @@ const gravatarReducer = (state = INICIAL_STATE, action) => {
   }
 };
 
-export default gravatarReducer;
+export default playerReducer;

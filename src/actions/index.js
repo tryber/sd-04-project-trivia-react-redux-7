@@ -18,7 +18,7 @@ export const playerInfo = (email, name) => {
   const hash = crypto.createHash('md5').update(email).digest('hex');
   return {
     type: PLAYER_INFO,
-    url: `www.gravatar.com/avatar/${hash}`,
+    url: `http://www.gravatar.com/avatar/${hash}`,
     name,
   };
 };

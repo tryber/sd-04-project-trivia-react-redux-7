@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
-import gravatarReducer from './gravatarReducer';
+import playerReducer from './playerReducer';
 import tokenReducer from './tokenReducer';
 import questionsReducer from './questionsReducer';
 import timerReducer from './timerReducer';
 
 const rootReducer = combineReducers({
-  gravatarReducer,
+  playerReducer,
   tokenReducer,
   questionsReducer,
   timerReducer,
