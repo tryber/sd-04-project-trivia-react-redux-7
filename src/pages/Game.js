@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import GameHeader from '../components/GameHeader';
 import GameQuestion from '../components/GameQuestion';
+import { Link } from 'react-router-dom';
 
 class Game extends Component {
   render() {
@@ -11,6 +12,10 @@ class Game extends Component {
       <div>
         <GameHeader />
         {isLoading ? 'Loading' : <GameQuestion />}
+        <Link to="/feedback">
+          <button type="button">
+            Feedback
+          </button></Link>
 
       </div>
     );

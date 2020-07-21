@@ -8,16 +8,16 @@ import GameHeader from '../components/GameHeader';
 class Feedback extends Component {
   render() {
     // const { score } = this.props; // store
-    const numeroDeAcertos = 4; // atualizar depois
+    const assertions = 4; // atualizar depois
     const score = 5;
     return (
       <div>
         <GameHeader />
-        <p data-testid="feedback-text">{(numeroDeAcertos >= 3 ?
+        <p data-testid="feedback-text">{(assertions >= 3 ?
           'Mandou bem!' : 'Podia ser melhor...')}</p>
 
         <p>Você acertou <span data-testid="feedback-total-question">
-          {numeroDeAcertos}</span> questões</p>
+          {assertions}</span> questões</p>
         <p>Um total de <span data-testid="feedback-total-score">{score}</span> pontos</p>
         <Link to="/rank">
           <button data-testid="btn-ranking" type="button">
