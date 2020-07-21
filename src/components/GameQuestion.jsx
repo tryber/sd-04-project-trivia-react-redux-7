@@ -8,11 +8,14 @@ class GameQuestion extends Component {
     super(props);
 
     this.state = {
-
+      isAnswerClicked: false,
+      correctBorder: { border: '' },
+      incorrectBorder: { border: '' },
     };
     this.renderCategoryText = this.renderCategoryText.bind(this);
     this.renderQuestionText = this.renderQuestionText.bind(this);
     this.shuffleAnswer = this.shuffleAnswer.bind(this);
+    this.clickedAnswer = this.clickedAnswer.bind(this);
   }
 
   componentDidMount() {
@@ -71,7 +74,16 @@ class GameQuestion extends Component {
     );
   }
 
+  clickedAnswer() {
+    this.setState({
+      isAnswerClicked: true,
+      correctBorder: { border: '3px solid rgb(6, 240, 15)' },
+      incorrectBorder: { border: '3px solid rgb(255, 0, 0)' },
+    });
+  }
+
   renderAnswerButton() {
+    const { isAnswerClicked, correctBorder, incorrectBorder } = this.state;
     const { dataQuestion } = this.props;
     const { correct_answer, incorrect_answers } = dataQuestion[0];
     console.log(correct_answer, incorrect_answers);
@@ -79,9 +91,9 @@ class GameQuestion extends Component {
 
     const renderBtn = ShuffledAllAnswer.map((answer, index) => {
       if (answer === correct_answer) {
-        return <button type="button" data-testid="correct-answer">{answer}</button>;
+        return <button style={correctBorder} disabled={isAnswerClicked} type="button" data-testid="correct-answer" onClick={this.clickedAnswer}>{answer}</button>;
       }
-      return <button type="button" data-testid={`wrong-answer${index}`}>{answer}</button>;
+      return <button style={incorrectBorder} disabled={isAnswerClicked} type="button" data-testid={`wrong-answer${index}`} onClick={this.clickedAnswer}>{answer}</button>;
     });
     return renderBtn;
   }
