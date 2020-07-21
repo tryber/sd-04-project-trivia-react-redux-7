@@ -77,11 +77,11 @@ class GameQuestion extends Component {
     console.log(correct_answer, incorrect_answers);
     const ShuffledAllAnswer = this.shuffleAnswer();
 
-    const renderBtn = ShuffledAllAnswer.map((answer) => {
+    const renderBtn = ShuffledAllAnswer.map((answer, index) => {
       if (answer === correct_answer) {
         return <button type="button" data-testid="correct-answer">{answer}</button>;
       }
-      return <button type="button" data-testid="wrong-answer">{answer}</button>;
+      return <button type="button" data-testid={`wrong-answer${index}`}>{answer}</button>;
     });
     return renderBtn;
   }
