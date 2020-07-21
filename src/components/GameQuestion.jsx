@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { requestQuestions } from '../actions'; // actionCreate retorna uma tunk
+import { requestQuestions, addAssertions } from '../actions'; // actionCreate retorna uma tunk
 
 class GameQuestion extends Component {
   constructor(props) {
@@ -11,11 +11,13 @@ class GameQuestion extends Component {
       isAnswerClicked: false,
       correctBorder: { border: '' },
       incorrectBorder: { border: '' },
+      score: 0,
     };
     this.renderCategoryText = this.renderCategoryText.bind(this);
     this.renderQuestionText = this.renderQuestionText.bind(this);
     this.shuffleAnswer = this.shuffleAnswer.bind(this);
     this.clickedAnswer = this.clickedAnswer.bind(this);
+    this.countAssertions = this.countAssertions.bind(this);
   }
 
   componentDidMount() {
@@ -74,12 +76,21 @@ class GameQuestion extends Component {
     );
   }
 
-  clickedAnswer() {
+  countAssertions(name) {
+    const { sumAssertion } = this.props;
+    if (name !== '') {
+      sumAssertion();
+    }
+  }
+
+  clickedAnswer(event) {
+    const { name } = event.target;
     this.setState({
       isAnswerClicked: true,
       correctBorder: { border: '3px solid rgb(6, 240, 15)' },
       incorrectBorder: { border: '3px solid rgb(255, 0, 0)' },
     });
+    this.countAssertions(name);
   }
 
   renderAnswerButton() {
@@ -91,15 +102,17 @@ class GameQuestion extends Component {
 
     const renderBtn = ShuffledAllAnswer.map((answer, index) => {
       if (answer === correct_answer) {
-        return <button style={correctBorder} disabled={isAnswerClicked} type="button" data-testid="correct-answer" onClick={this.clickedAnswer}>{answer}</button>;
+        return <button key={answer} name={index} style={correctBorder} disabled={isAnswerClicked} type="button" data-testid="correct-answer" onClick={this.clickedAnswer}>{answer}</button>;
       }
-      return <button style={incorrectBorder} disabled={isAnswerClicked} type="button" data-testid={`wrong-answer${index}`} onClick={this.clickedAnswer}>{answer}</button>;
+      return <button key={answer} style={incorrectBorder} disabled={isAnswerClicked} type="button" data-testid={`wrong-answer${index}`} onClick={this.clickedAnswer}>{answer}</button>;
     });
     return renderBtn;
   }
 
   render() {
     const { dataQuestion } = this.props;
+    const { assertion } = this.state;
+    console.log('assertions = ', assertion);
     if (dataQuestion.length === 0) return <p>loading...</p>;
     return (
       <div className="game-question">
@@ -118,6 +131,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getQuestions: (token) => dispatch(requestQuestions(token)),
+  sumAssertion: () => dispatch(addAssertions()),
 });
 
 GameQuestion.defaultProps = {
@@ -129,6 +143,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(GameQuestion);
 GameQuestion.propTypes = {
   token: PropTypes.string.isRequired,
   getQuestions: PropTypes.func.isRequired,
+  sumAssertion: PropTypes.func.isRequired,
   dataQuestion: PropTypes.arrayOf(
     PropTypes.shape({
       category: PropTypes.string,
