@@ -11,7 +11,6 @@ class GameQuestion extends Component {
       isAnswerClicked: false,
       correctBorder: { border: '' },
       incorrectBorder: { border: '' },
-      score: 0,
     };
     this.renderCategoryText = this.renderCategoryText.bind(this);
     this.renderQuestionText = this.renderQuestionText.bind(this);
@@ -49,6 +48,23 @@ class GameQuestion extends Component {
     return allAnswers;
   }
 
+  countAssertions(name) {
+    const { sumAssertion } = this.props;
+    if (name !== '') {
+      sumAssertion();
+    }
+  }
+
+  clickedAnswer(event) {
+    const { name } = event.target;
+    this.setState({
+      isAnswerClicked: true,
+      correctBorder: { border: '3px solid rgb(6, 240, 15)' },
+      incorrectBorder: { border: '3px solid rgb(255, 0, 0)' },
+    });
+    this.countAssertions(name);
+  }
+
   renderCategoryText() {
     const { dataQuestion } = this.props;
     console.log(dataQuestion);
@@ -76,23 +92,6 @@ class GameQuestion extends Component {
     );
   }
 
-  countAssertions(name) {
-    const { sumAssertion } = this.props;
-    if (name !== '') {
-      sumAssertion();
-    }
-  }
-
-  clickedAnswer(event) {
-    const { name } = event.target;
-    this.setState({
-      isAnswerClicked: true,
-      correctBorder: { border: '3px solid rgb(6, 240, 15)' },
-      incorrectBorder: { border: '3px solid rgb(255, 0, 0)' },
-    });
-    this.countAssertions(name);
-  }
-
   renderAnswerButton() {
     const { isAnswerClicked, correctBorder, incorrectBorder } = this.state;
     const { dataQuestion } = this.props;
@@ -102,7 +101,11 @@ class GameQuestion extends Component {
 
     const renderBtn = ShuffledAllAnswer.map((answer, index) => {
       if (answer === correct_answer) {
-        return <button key={answer} name={index} style={correctBorder} disabled={isAnswerClicked} type="button" data-testid="correct-answer" onClick={this.clickedAnswer}>{answer}</button>;
+        return (
+          <button key={answer} name={index} style={correctBorder} disabled={isAnswerClicked} type="button" data-testid="correct-answer" onClick={this.clickedAnswer}>
+            {answer}
+          </button>
+        );
       }
       return <button key={answer} style={incorrectBorder} disabled={isAnswerClicked} type="button" data-testid={`wrong-answer${index}`} onClick={this.clickedAnswer}>{answer}</button>;
     });
