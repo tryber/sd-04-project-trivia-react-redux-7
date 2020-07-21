@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import GameHeader from '../components/GameHeader';
-import { Link } from 'react-router-dom';
+
 
 class Feedback extends Component {
   render() {
     // const { score } = this.props; // store
-    const numeroDeAcertos = 4; /// atualizar depois
+    const numeroDeAcertos = 4; // atualizar depois
     const score = 5;
     return (
       <div>
