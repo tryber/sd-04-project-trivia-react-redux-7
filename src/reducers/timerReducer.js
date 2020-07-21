@@ -1,17 +1,16 @@
-import { TIMEOUT } from '../actions';
+import { COUNTDOWN } from '../actions';
 
 const INITIAL_STATE = {
   time: 30,
   setIntervalId: '',
-  timeout: false,
 };
 
 const timeReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case TIMEOUT:
+    case COUNTDOWN:
       return {
         ...state,
-        timeout: !state.timeout,
+        time: state.time - 1,
       };
     default:
       return state;

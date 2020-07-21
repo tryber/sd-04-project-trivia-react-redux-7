@@ -1,17 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { timeout } from '../actions';
+import { countdown } from '../actions';
 
 class Time extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      time: 30,
       setIntervalId: '',
     };
     this.timeManagement = this.timeManagement.bind(this);
-    this.countdown = this.countdown.bind(this);
+    // this.countdown = this.countdown.bind(this);
   }
 
   componentDidMount() {
@@ -19,35 +18,37 @@ class Time extends React.Component {
   }
 
   componentDidUpdate() {
-    const { time, setIntervalId } = this.state;
-    const { timeIsOut } = this.props;
+    const { setIntervalId } = this.state;
+    const { time } = this.props;
     if (time === 0) {
       clearInterval(setIntervalId);
-      timeIsOut();
+      console.log('clearInterval done');
     }
   }
 
   timeManagement() {
-    const setIntervalId = setInterval(this.countdown, 1000);
+    const { timeCount } = this.props;
+    const setIntervalId = setInterval(timeCount, 1000);
     this.setState({ setIntervalId });
   }
 
-  countdown() {
-    this.setState((state) => ({ time: state.time - 1 }));
-  }
-
   render() {
-    const { time } = this.state;
+    const { time } = this.props;
     return <div>{time}</div>;
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  timeIsOut: () => dispatch(timeout()),
+  timeCount: () => dispatch(countdown()),
+});
+
+const mapStateToProps = (state) => ({
+  time: state.timerReducer.time,
 });
 
 Time.propTypes = {
-  timeIsOut: PropTypes.func.isRequired,
+  timeCount: PropTypes.func.isRequired,
+  time: PropTypes.number.isRequired,
 };
 
-export default connect(null, mapDispatchToProps)(Time);
+export default connect(mapStateToProps, mapDispatchToProps)(Time);
