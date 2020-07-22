@@ -228,6 +228,12 @@ GameQuestion.propTypes = {
   calculateScore: PropTypes.func.isRequired,
   sumAssertion: PropTypes.func.isRequired,
   questionIndex: PropTypes.number.isRequired,
+  correctBorder: PropTypes.shape({
+    border: PropTypes.string.isRequired,
+  }).isRequired,
+  incorrectBorder: PropTypes.shape({
+    border: PropTypes.string.isRequired,
+  }).isRequired,
   player: PropTypes.shape({
     name: PropTypes.string,
     assertions: PropTypes.number,
