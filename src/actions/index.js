@@ -10,6 +10,7 @@ export const COUNTDOWN = 'COUNTDOWN';
 export const PLAYER_INFO = 'PLAYER_INFO';
 export const ADD_ASSERTIONS = 'ADD_ASSERTIONS';
 export const CLICKED_BUTTON = 'CLICKED_BUTTON';
+export const CALCULATE_SCORE = 'CALCULATE_SCORE';
 const crypto = require('crypto');
 
 export const countdown = () => ({
@@ -81,4 +82,10 @@ export const addAssertions = () => ({
 
 export const clickedButton = () => ({
   type: CLICKED_BUTTON,
+});
+
+export const scoreSum = (timer, difficulty) => ({
+  type: CALCULATE_SCORE,
+  timer,
+  difficulty,
 });

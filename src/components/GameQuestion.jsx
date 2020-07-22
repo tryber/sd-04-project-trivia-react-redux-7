@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { requestQuestions, addAssertions, clickedButton } from '../actions'; // actionCreate retorna uma tunk
+import { requestQuestions, addAssertions, clickedButton, scoreSum } from '../actions'; // actionCreate retorna uma tunk
 
 class GameQuestion extends Component {
   constructor(props) {
@@ -15,18 +15,45 @@ class GameQuestion extends Component {
     this.renderQuestionText = this.renderQuestionText.bind(this);
     this.shuffleAnswer = this.shuffleAnswer.bind(this);
     this.clickedAnswer = this.clickedAnswer.bind(this);
-    this.countAssertions = this.countAssertions.bind(this);
+    this.sumScore = this.sumScore.bind(this);
+    this.countAssertionsAndSumScore = this.countAssertionsAndSumScore.bind(this);
   }
 
   componentDidMount() {
-    const { token, getQuestions } = this.props;
+    const { token, getQuestions, player: { name, assertions, score, email } } = this.props;
+    const playerObj = {
+      name,
+      assertions,
+      score,
+      gravatarEmail: email,
+    };
     localStorage.setItem('token', token);
+    localStorage.setItem('player', JSON.stringify(playerObj));
     getQuestions(token);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.isAnswerClicked) return true;
+    if (nextProps.timer <= 28) return false;
+    return true;
+  }
+
+  componentDidUpdate() {
+    const { player: { name, assertions, score, email } } = this.props;
+    const playerObj = {
+      name,
+      assertions,
+      score,
+      gravatarEmail: email,
+    };
+    localStorage.setItem('player', JSON.stringify(playerObj));
   }
 
   shuffleAnswer() {
     const { dataQuestion } = this.props;
+    // eslint-disable-next-line camelcase
     const { correct_answer, incorrect_answers } = dataQuestion[0];
+    // eslint-disable-next-line camelcase
     const allAnswers = [correct_answer, ...incorrect_answers];
 
     let currentIndex = allAnswers.length;
@@ -48,10 +75,36 @@ class GameQuestion extends Component {
     return allAnswers;
   }
 
-  countAssertions(name) {
+  sumScore() {
+    const { dataQuestion, calculateScore, timer } = this.props;
+    const { difficulty } = dataQuestion[0];
+    switch (difficulty) {
+      case 'easy':
+        calculateScore(timer, 1);
+        break;
+      case 'medium':
+        calculateScore(timer, 2);
+        break;
+      case 'hard':
+        calculateScore(timer, 3);
+        break;
+      default:
+        break;
+    }
+  }
+
+  countAssertionsAndSumScore(buttonName) {
     const { sumAssertion } = this.props;
-    if (name !== '') {
+    if (buttonName !== '') {
       sumAssertion();
+      this.sumScore();
+      // const playerObj = {
+      //   name,
+      //   assertions,
+      //   score,
+      //   gravatarEmail: email,
+      // };
+      // localStorage.setItem('player', JSON.stringify(playerObj));
     }
   }
 
@@ -62,16 +115,14 @@ class GameQuestion extends Component {
       correctBorder: { border: '3px solid rgb(6, 240, 15)' },
       incorrectBorder: { border: '3px solid rgb(255, 0, 0)' },
     });
-    this.countAssertions(name);
+    this.countAssertionsAndSumScore(name);
     dispatchButtonClick();
   }
 
   renderCategoryText() {
     const { dataQuestion } = this.props;
-    console.log(dataQuestion);
 
     const { category } = dataQuestion[0];
-    console.log(category);
     return (
       <div className="game-question-category">
         <h2 data-testid="question-category">{category}</h2>
@@ -92,9 +143,11 @@ class GameQuestion extends Component {
   renderAnswerButton() {
     const { correctBorder, incorrectBorder } = this.state;
     const { dataQuestion, isAnswerClicked } = this.props;
+    // eslint-disable-next-line camelcase
     const { correct_answer } = dataQuestion[0];
     const ShuffledAllAnswer = this.shuffleAnswer();
     const renderBtn = ShuffledAllAnswer.map((answer, index) => {
+      // eslint-disable-next-line camelcase
       if (answer === correct_answer) {
         return (
           <button
@@ -120,9 +173,10 @@ class GameQuestion extends Component {
   }
 
   render() {
-    const { dataQuestion } = this.props;
-    const { assertion } = this.state;
-    console.log('assertions = ', assertion);
+    const { dataQuestion, isLoading } = this.props;
+    console.log('render');
+    console.log(dataQuestion.length);
+    console.log(isLoading);
     if (dataQuestion.length === 0) return <p>loading...</p>;
     return (
       <div className="game-question">
@@ -138,12 +192,17 @@ const mapStateToProps = (state) => ({
   dataQuestion: state.questionsReducer.dataQuestions,
   token: state.tokenReducer.dataToken,
   isAnswerClicked: state.timerReducer.isAnswerClicked,
+  player: state.playerReducer,
+  timer: state.timerReducer.time,
+  isLoading: state.questionsReducer.isLoading,
+  score: state.playerReducer.score,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getQuestions: (token) => dispatch(requestQuestions(token)),
   sumAssertion: () => dispatch(addAssertions()),
   dispatchButtonClick: () => dispatch(clickedButton()),
+  calculateScore: (timer, difficulty) => dispatch(scoreSum(timer, difficulty)),
 });
 
 GameQuestion.defaultProps = {
@@ -157,6 +216,7 @@ GameQuestion.propTypes = {
   getQuestions: PropTypes.func.isRequired,
   isAnswerClicked: PropTypes.bool.isRequired,
   dispatchButtonClick: PropTypes.func.isRequired,
+  calculateScore: PropTypes.func.isRequired,
   sumAssertion: PropTypes.func.isRequired,
   dataQuestion: PropTypes.arrayOf(
     PropTypes.shape({
