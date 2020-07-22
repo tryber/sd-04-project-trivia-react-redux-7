@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { requestQuestions, addAssertions, clickedButton, scoreSum } from '../actions'; // actionCreate retorna uma tunk
+import {
+  requestQuestions, addAssertions, clickedButton, scoreSum,
+} from '../actions'; // actionCreate retorna uma tunk
+import NextQuestionBtn from './NextQuestionBtn';
 
 class GameQuestion extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      correctBorder: { border: '' },
-      incorrectBorder: { border: '' },
-    };
     this.renderCategoryText = this.renderCategoryText.bind(this);
     this.renderQuestionText = this.renderQuestionText.bind(this);
     this.shuffleAnswer = this.shuffleAnswer.bind(this);
@@ -20,7 +19,11 @@ class GameQuestion extends Component {
   }
 
   componentDidMount() {
-    const { token, getQuestions, player: { name, assertions, score, email } } = this.props;
+    const {
+      token, getQuestions, player: {
+        name, assertions, score, email,
+      },
+    } = this.props;
     const playerObj = {
       player: {
         name,
@@ -41,7 +44,11 @@ class GameQuestion extends Component {
   }
 
   componentDidUpdate() {
-    const { player: { name, assertions, score, email } } = this.props;
+    const {
+      player: {
+        name, assertions, score, email,
+      },
+    } = this.props;
     const playerObj = {
       player: {
         name,
@@ -56,9 +63,9 @@ class GameQuestion extends Component {
   }
 
   shuffleAnswer() {
-    const { dataQuestion } = this.props;
+    const { dataQuestion, questionIndex } = this.props;
     // eslint-disable-next-line camelcase
-    const { correct_answer, incorrect_answers } = dataQuestion[0];
+    const { correct_answer, incorrect_answers } = dataQuestion[questionIndex];
     // eslint-disable-next-line camelcase
     const allAnswers = [correct_answer, ...incorrect_answers];
 
@@ -82,8 +89,10 @@ class GameQuestion extends Component {
   }
 
   sumScore() {
-    const { dataQuestion, calculateScore, timer } = this.props;
-    const { difficulty } = dataQuestion[0];
+    const {
+      dataQuestion, calculateScore, timer, questionIndex,
+    } = this.props;
+    const { difficulty } = dataQuestion[questionIndex];
     switch (difficulty) {
       case 'easy':
         calculateScore(timer, 1);
@@ -110,18 +119,14 @@ class GameQuestion extends Component {
   clickedAnswer(event) {
     const { name } = event.target;
     const { dispatchButtonClick } = this.props;
-    this.setState({
-      correctBorder: { border: '3px solid rgb(6, 240, 15)' },
-      incorrectBorder: { border: '3px solid rgb(255, 0, 0)' },
-    });
     this.countAssertionsAndSumScore(name);
     dispatchButtonClick();
   }
 
   renderCategoryText() {
-    const { dataQuestion } = this.props;
+    const { dataQuestion, questionIndex } = this.props;
 
-    const { category } = dataQuestion[0];
+    const { category } = dataQuestion[questionIndex];
     return (
       <div className="game-question-category">
         <h2 data-testid="question-category">{category}</h2>
@@ -130,8 +135,8 @@ class GameQuestion extends Component {
   }
 
   renderQuestionText() {
-    const { dataQuestion } = this.props;
-    const { question } = dataQuestion[0];
+    const { dataQuestion, questionIndex } = this.props;
+    const { question } = dataQuestion[questionIndex];
     return (
       <div className="game-question-text">
         <p data-testid="question-text">{question}</p>
@@ -140,10 +145,11 @@ class GameQuestion extends Component {
   }
 
   renderAnswerButton() {
-    const { correctBorder, incorrectBorder } = this.state;
-    const { dataQuestion, isAnswerClicked } = this.props;
+    const {
+      dataQuestion, isAnswerClicked, questionIndex, correctBorder, incorrectBorder,
+    } = this.props;
     // eslint-disable-next-line camelcase
-    const { correct_answer } = dataQuestion[0];
+    const { correct_answer } = dataQuestion[questionIndex];
     const ShuffledAllAnswer = this.shuffleAnswer();
     const renderBtn = ShuffledAllAnswer.map((answer, index) => {
       // eslint-disable-next-line camelcase
@@ -172,13 +178,16 @@ class GameQuestion extends Component {
   }
 
   render() {
-    const { dataQuestion } = this.props;
+    const { dataQuestion, isAnswerClicked } = this.props;
     if (dataQuestion.length === 0) return <p>loading...</p>;
     return (
       <div className="game-question">
         {this.renderCategoryText()}
         {this.renderQuestionText()}
         {this.renderAnswerButton()}
+        <div>
+          {(isAnswerClicked) && <NextQuestionBtn />}
+        </div>
       </div>
     );
   }
@@ -192,6 +201,9 @@ const mapStateToProps = (state) => ({
   timer: state.timerReducer.time,
   isLoading: state.questionsReducer.isLoading,
   score: state.playerReducer.score,
+  questionIndex: state.questionsReducer.questionIndex,
+  correctBorder: state.timerReducer.correctBorder,
+  incorrectBorder: state.timerReducer.incorrectBorder,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -215,6 +227,7 @@ GameQuestion.propTypes = {
   dispatchButtonClick: PropTypes.func.isRequired,
   calculateScore: PropTypes.func.isRequired,
   sumAssertion: PropTypes.func.isRequired,
+  questionIndex: PropTypes.number.isRequired,
   player: PropTypes.shape({
     name: PropTypes.string,
     assertions: PropTypes.number,

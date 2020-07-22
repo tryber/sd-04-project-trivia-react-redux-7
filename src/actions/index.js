@@ -11,6 +11,8 @@ export const PLAYER_INFO = 'PLAYER_INFO';
 export const ADD_ASSERTIONS = 'ADD_ASSERTIONS';
 export const CLICKED_BUTTON = 'CLICKED_BUTTON';
 export const CALCULATE_SCORE = 'CALCULATE_SCORE';
+export const CHANGE_QUESTION_INDEX = 'CHANGE_QUESTION_INDEX';
+export const NEXT_QUESTION = 'NEXT_QUESTION';
 const crypto = require('crypto');
 
 export const countdown = () => ({
@@ -89,4 +91,12 @@ export const scoreSum = (timer, difficulty) => ({
   type: CALCULATE_SCORE,
   timer,
   difficulty,
+});
+
+export const changeQuestionsIndex = () => ({
+  type: CHANGE_QUESTION_INDEX,
+});
+
+export const nextQuestion = () => ({
+  type: NEXT_QUESTION,
 });
