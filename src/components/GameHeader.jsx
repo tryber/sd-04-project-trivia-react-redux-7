@@ -22,6 +22,7 @@ class GameHeader extends Component {
 const mapStateToProps = (state) => ({
   name: state.playerReducer.name,
   avatarUrl: state.playerReducer.avatarUrl,
+  score: state.playerReducer.score,
 });
 
 GameHeader.defaultProps = {
