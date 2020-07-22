@@ -7,6 +7,7 @@ export const REQUEST_API_SUCCESS_QUESTIONS = 'REQUEST_API_SUCCESS_QUESTIONS';
 export const REQUEST_API_ERROR_TOKEN = 'REQUEST_API_ERROR_TOKEN';
 export const REQUEST_API_ERROR_QUESTIONS = 'REQUEST_API_ERROR_QUESTIONS';
 export const PLAYER_INFO = 'PLAYER_INFO';
+export const ADD_ASSERTIONS = 'ADD_ASSERTIONS';
 const crypto = require('crypto');
 
 export const playerInfo = (email, name) => {
@@ -67,3 +68,7 @@ export function requestToken() {
     );
   };
 }
+
+export const addAssertions = () => ({
+  type: ADD_ASSERTIONS,
+});
