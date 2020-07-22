@@ -1,4 +1,4 @@
-import { PLAYER_INFO, ADD_ASSERTIONS } from '../actions';
+import { PLAYER_INFO, ADD_ASSERTIONS, CALCULATE_SCORE } from '../actions';
 
 const INICIAL_STATE = {
   assertions: 0,
@@ -21,6 +21,11 @@ const playerReducer = (state = INICIAL_STATE, action) => {
       return {
         ...state,
         assertions: state.assertions + 1,
+      };
+    case CALCULATE_SCORE:
+      return {
+        ...state,
+        score: 10 + (action.timer * action.difficulty),
       };
     default:
       return state;

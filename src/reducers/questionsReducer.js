@@ -6,7 +6,7 @@ import {
 
 const INICIAL_STATE = {
   dataQuestions: [],
-  isLoading: false,
+  isLoading: true,
   errorQuestions: '',
 };
 
