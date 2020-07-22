@@ -8,6 +8,7 @@ export const REQUEST_API_ERROR_TOKEN = 'REQUEST_API_ERROR_TOKEN';
 export const REQUEST_API_ERROR_QUESTIONS = 'REQUEST_API_ERROR_QUESTIONS';
 export const COUNTDOWN = 'COUNTDOWN';
 export const PLAYER_INFO = 'PLAYER_INFO';
+export const ADD_ASSERTIONS = 'ADD_ASSERTIONS';
 const crypto = require('crypto');
 
 export const countdown = () => ({
@@ -72,3 +73,7 @@ export function requestToken() {
     );
   };
 }
+
+export const addAssertions = () => ({
+  type: ADD_ASSERTIONS,
+});
