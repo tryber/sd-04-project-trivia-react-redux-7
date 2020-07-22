@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { requestQuestions, addAssertions } from '../actions'; // actionCreate retorna uma tunk
+import { requestQuestions, addAssertions, clickedButton } from '../actions'; // actionCreate retorna uma tunk
 
 class GameQuestion extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isAnswerClicked: false,
       correctBorder: { border: '' },
       incorrectBorder: { border: '' },
     };
@@ -30,8 +29,9 @@ class GameQuestion extends Component {
     const { correct_answer, incorrect_answers } = dataQuestion[0];
     const allAnswers = [correct_answer, ...incorrect_answers];
 
-    let currentIndex = allAnswers.length; let temporaryValue; let
-      randomIndex;
+    let currentIndex = allAnswers.length;
+    let temporaryValue;
+    let randomIndex;
 
     // While there remain elements to shuffle...
     while (currentIndex !== 0) {
@@ -57,12 +57,13 @@ class GameQuestion extends Component {
 
   clickedAnswer(event) {
     const { name } = event.target;
+    const { dispatchButtonClick } = this.props;
     this.setState({
-      isAnswerClicked: true,
       correctBorder: { border: '3px solid rgb(6, 240, 15)' },
       incorrectBorder: { border: '3px solid rgb(255, 0, 0)' },
     });
     this.countAssertions(name);
+    dispatchButtonClick();
   }
 
   renderCategoryText() {
@@ -73,9 +74,7 @@ class GameQuestion extends Component {
     console.log(category);
     return (
       <div className="game-question-category">
-        <h2 data-testid="question-category">
-          {category}
-        </h2>
+        <h2 data-testid="question-category">{category}</h2>
       </div>
     );
   }
@@ -85,20 +84,16 @@ class GameQuestion extends Component {
     const { question } = dataQuestion[0];
     return (
       <div className="game-question-text">
-        <p data-testid="question-text">
-          {question}
-        </p>
+        <p data-testid="question-text">{question}</p>
       </div>
     );
   }
 
   renderAnswerButton() {
-    const { isAnswerClicked, correctBorder, incorrectBorder } = this.state;
-    const { dataQuestion } = this.props;
-    const { correct_answer, incorrect_answers } = dataQuestion[0];
-    console.log(correct_answer, incorrect_answers);
+    const { correctBorder, incorrectBorder } = this.state;
+    const { dataQuestion, isAnswerClicked } = this.props;
+    const { correct_answer } = dataQuestion[0];
     const ShuffledAllAnswer = this.shuffleAnswer();
-
     const renderBtn = ShuffledAllAnswer.map((answer, index) => {
       if (answer === correct_answer) {
         return (
@@ -115,7 +110,11 @@ class GameQuestion extends Component {
           </button>
         );
       }
-      return <button key={answer} style={incorrectBorder} disabled={isAnswerClicked} type="button" data-testid={`wrong-answer${index}`} onClick={this.clickedAnswer}>{answer}</button>;
+      return (
+        <button key={answer} style={incorrectBorder} disabled={isAnswerClicked} type="button" data-testid={`wrong-answer${index}`} onClick={this.clickedAnswer}>
+          {answer}
+        </button>
+      );
     });
     return renderBtn;
   }
@@ -138,11 +137,13 @@ class GameQuestion extends Component {
 const mapStateToProps = (state) => ({
   dataQuestion: state.questionsReducer.dataQuestions,
   token: state.tokenReducer.dataToken,
+  isAnswerClicked: state.timerReducer.isAnswerClicked,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getQuestions: (token) => dispatch(requestQuestions(token)),
   sumAssertion: () => dispatch(addAssertions()),
+  dispatchButtonClick: () => dispatch(clickedButton()),
 });
 
 GameQuestion.defaultProps = {
@@ -154,6 +155,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(GameQuestion);
 GameQuestion.propTypes = {
   token: PropTypes.string.isRequired,
   getQuestions: PropTypes.func.isRequired,
+  isAnswerClicked: PropTypes.bool.isRequired,
+  dispatchButtonClick: PropTypes.func.isRequired,
   sumAssertion: PropTypes.func.isRequired,
   dataQuestion: PropTypes.arrayOf(
     PropTypes.shape({

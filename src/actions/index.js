@@ -6,15 +6,21 @@ export const REQUEST_API_SUCCESS_TOKEN = 'REQUEST_API_SUCCESS_TOKEN';
 export const REQUEST_API_SUCCESS_QUESTIONS = 'REQUEST_API_SUCCESS_QUESTIONS';
 export const REQUEST_API_ERROR_TOKEN = 'REQUEST_API_ERROR_TOKEN';
 export const REQUEST_API_ERROR_QUESTIONS = 'REQUEST_API_ERROR_QUESTIONS';
+export const COUNTDOWN = 'COUNTDOWN';
 export const PLAYER_INFO = 'PLAYER_INFO';
 export const ADD_ASSERTIONS = 'ADD_ASSERTIONS';
+export const CLICKED_BUTTON = 'CLICKED_BUTTON';
 const crypto = require('crypto');
+
+export const countdown = () => ({
+  type: COUNTDOWN,
+});
 
 export const playerInfo = (email, name) => {
   const hash = crypto.createHash('md5').update(email).digest('hex');
   return {
     type: PLAYER_INFO,
-    url: `www.gravatar.com/avatar/${hash}`,
+    url: `http://www.gravatar.com/avatar/${hash}`,
     name,
   };
 };
@@ -71,4 +77,8 @@ export function requestToken() {
 
 export const addAssertions = () => ({
   type: ADD_ASSERTIONS,
+});
+
+export const clickedButton = () => ({
+  type: CLICKED_BUTTON,
 });
