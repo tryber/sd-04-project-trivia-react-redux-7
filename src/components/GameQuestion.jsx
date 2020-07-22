@@ -22,13 +22,15 @@ class GameQuestion extends Component {
   componentDidMount() {
     const { token, getQuestions, player: { name, assertions, score, email } } = this.props;
     const playerObj = {
-      name,
-      assertions,
-      score,
-      gravatarEmail: email,
+      player: {
+        name,
+        assertions,
+        score,
+        gravatarEmail: email,
+      },
     };
     localStorage.setItem('token', token);
-    localStorage.setItem('player', JSON.stringify(playerObj));
+    localStorage.setItem('state', JSON.stringify(playerObj));
     getQuestions(token);
   }
 
@@ -41,12 +43,16 @@ class GameQuestion extends Component {
   componentDidUpdate() {
     const { player: { name, assertions, score, email } } = this.props;
     const playerObj = {
-      name,
-      assertions,
-      score,
-      gravatarEmail: email,
+      player: {
+        name,
+        assertions,
+        score,
+        gravatarEmail: email,
+      },
     };
-    localStorage.setItem('player', JSON.stringify(playerObj));
+    localStorage.setItem('state', JSON.stringify(playerObj));
+    const now = JSON.parse(localStorage.getItem('state'));
+    console.log(now.player.score);
   }
 
   shuffleAnswer() {
