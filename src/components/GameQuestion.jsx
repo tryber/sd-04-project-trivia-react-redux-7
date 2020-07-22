@@ -92,10 +92,8 @@ class GameQuestion extends Component {
   renderAnswerButton() {
     const { correctBorder, incorrectBorder } = this.state;
     const { dataQuestion, isAnswerClicked } = this.props;
-    const { correct_answer, incorrect_answers } = dataQuestion[0];
-    console.log(correct_answer, incorrect_answers);
+    const { correct_answer } = dataQuestion[0];
     const ShuffledAllAnswer = this.shuffleAnswer();
-
     const renderBtn = ShuffledAllAnswer.map((answer, index) => {
       if (answer === correct_answer) {
         return (
@@ -113,14 +111,7 @@ class GameQuestion extends Component {
         );
       }
       return (
-        <button
-          key={answer}
-          style={incorrectBorder}
-          disabled={isAnswerClicked}
-          type="button"
-          data-testid={`wrong-answer${index}`}
-          onClick={this.clickedAnswer}
-        >
+        <button key={answer} style={incorrectBorder} disabled={isAnswerClicked} type="button" data-testid={`wrong-answer${index}`} onClick={this.clickedAnswer}>
           {answer}
         </button>
       );
