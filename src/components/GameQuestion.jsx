@@ -98,13 +98,6 @@ class GameQuestion extends Component {
     if (buttonName !== '') {
       sumAssertion();
       this.sumScore();
-      // const playerObj = {
-      //   name,
-      //   assertions,
-      //   score,
-      //   gravatarEmail: email,
-      // };
-      // localStorage.setItem('player', JSON.stringify(playerObj));
     }
   }
 
@@ -173,10 +166,7 @@ class GameQuestion extends Component {
   }
 
   render() {
-    const { dataQuestion, isLoading } = this.props;
-    console.log('render');
-    console.log(dataQuestion.length);
-    console.log(isLoading);
+    const { dataQuestion } = this.props;
     if (dataQuestion.length === 0) return <p>loading...</p>;
     return (
       <div className="game-question">
@@ -215,9 +205,16 @@ GameQuestion.propTypes = {
   token: PropTypes.string.isRequired,
   getQuestions: PropTypes.func.isRequired,
   isAnswerClicked: PropTypes.bool.isRequired,
+  timer: PropTypes.number.isRequired,
   dispatchButtonClick: PropTypes.func.isRequired,
   calculateScore: PropTypes.func.isRequired,
   sumAssertion: PropTypes.func.isRequired,
+  player: PropTypes.shape({
+    name: PropTypes.string,
+    assertions: PropTypes.number,
+    score: PropTypes.number,
+    email: PropTypes.string,
+  }).isRequired,
   dataQuestion: PropTypes.arrayOf(
     PropTypes.shape({
       category: PropTypes.string,

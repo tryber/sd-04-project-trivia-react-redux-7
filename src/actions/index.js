@@ -23,6 +23,7 @@ export const playerInfo = (email, name) => {
     type: PLAYER_INFO,
     url: `http://www.gravatar.com/avatar/${hash}`,
     name,
+    email,
   };
 };
 
