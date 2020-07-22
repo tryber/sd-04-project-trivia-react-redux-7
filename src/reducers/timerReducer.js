@@ -1,4 +1,4 @@
-import { COUNTDOWN, CLIKED_BUTTON } from '../actions';
+import { COUNTDOWN, CLICKED_BUTTON } from '../actions';
 
 const INITIAL_STATE = {
   time: 30,
@@ -13,7 +13,7 @@ const timeReducer = (state = INITIAL_STATE, action) => {
         ...state,
         time: state.time - 1,
       };
-    case CLIKED_BUTTON:
+    case CLICKED_BUTTON:
       return {
         ...state,
         isAnswerClicked: true,
