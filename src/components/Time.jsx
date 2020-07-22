@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { countdown } from '../actions';
+import { countdown, clickedButton } from '../actions';
 
 class Time extends React.Component {
   constructor(props) {
@@ -19,10 +19,11 @@ class Time extends React.Component {
 
   componentDidUpdate() {
     const { setIntervalId } = this.state;
-    const { time } = this.props;
-    if (time <= 0) {
+    const { time, isAnswerClicked, dispatchButtonClick } = this.props;
+    if (time <= 0 || isAnswerClicked) {
       clearInterval(setIntervalId);
       console.log('clearInterval done');
+      dispatchButtonClick();
     }
   }
 
@@ -40,15 +41,19 @@ class Time extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   timeCount: () => dispatch(countdown()),
+  dispatchButtonClick: () => dispatch(clickedButton()),
 });
 
 const mapStateToProps = (state) => ({
   time: state.timerReducer.time,
+  isAnswerClicked: state.timerReducer.isAnswerClicked,
 });
 
 Time.propTypes = {
   timeCount: PropTypes.func.isRequired,
   time: PropTypes.number.isRequired,
+  isAnswerClicked: PropTypes.bool.isRequired,
+  dispatchButtonClick: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Time);

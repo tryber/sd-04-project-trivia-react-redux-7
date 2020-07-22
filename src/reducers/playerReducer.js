@@ -6,7 +6,6 @@ const INICIAL_STATE = {
   avatarUrl: '',
   email: '',
   name: '',
-  assertions: 0,
 };
 
 const playerReducer = (state = INICIAL_STATE, action) => {
