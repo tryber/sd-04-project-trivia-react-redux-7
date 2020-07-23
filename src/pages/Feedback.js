@@ -26,7 +26,9 @@ class Feedback extends Component {
           </button>
         </Link>
         <Link to="/">
-          <button type="button" data-testid="btn-play-again" onClick={() => resetToRestart()}>JOGAR NOVAMENTE</button>
+          <button type="button" data-testid="btn-play-again" onClick={() => resetToRestart()}>
+            JOGAR NOVAMENTE
+          </button>
         </Link>
 
       </div>
