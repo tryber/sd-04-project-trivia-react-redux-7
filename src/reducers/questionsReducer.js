@@ -2,12 +2,14 @@ import {
   REQUEST_API_QUESTIONS,
   REQUEST_API_SUCCESS_QUESTIONS,
   REQUEST_API_ERROR_QUESTIONS,
+  CHANGE_QUESTION_INDEX,
 } from '../actions';
 
 const INICIAL_STATE = {
   dataQuestions: [],
   isLoading: true,
   errorQuestions: '',
+  questionIndex: 0,
 };
 
 const questionsReducer = (state = INICIAL_STATE, action) => {
@@ -28,6 +30,11 @@ const questionsReducer = (state = INICIAL_STATE, action) => {
         ...state,
         errorQuestions: action.error,
         isLoading: false,
+      };
+    case CHANGE_QUESTION_INDEX:
+      return {
+        ...state,
+        questionIndex: state.questionIndex + 1,
       };
     default:
       return state;
