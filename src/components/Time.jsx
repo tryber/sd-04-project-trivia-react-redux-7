@@ -24,10 +24,9 @@ class Time extends React.Component {
     } = this.props;
     if (time <= 0 || isAnswerClicked) {
       clearInterval(setIntervalId);
-      console.log('clearInterval done');
       dispatchButtonClick();
     }
-    if (questionIndex > prevProps.questionIndex) {
+    if (questionIndex > prevProps.questionIndex && questionIndex <= 4) {
       this.timeManagement();
     }
   }

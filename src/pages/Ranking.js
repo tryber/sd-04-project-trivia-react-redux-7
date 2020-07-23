@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { resetStateToRestart } from '../actions';
 // import { saveRanking } from '../actions';
 
 class Ranking extends React.Component {
@@ -31,6 +32,7 @@ class Ranking extends React.Component {
 
   render() {
     const ranking = this.insertNewPlayerOnRanking();
+    const { resetToRestart } = this.props;
     return (
       <div>
         <div>
@@ -45,24 +47,27 @@ class Ranking extends React.Component {
             ))}
           </ol>
         </div>
-        <Link data-testid="btn-go-home" to="/">
-          Jogar Novamente!
+        <Link to="/">
+          <button data-testid="btn-go-home" type="button" onClick={() => resetToRestart()}>
+            Jogar Novamente!
+          </button>
+
         </Link>
       </div>
     );
   }
 }
 
-// const mapDispatchToProps = (dispatch) => ({
-//   rankingToState: (name, score, picture) => dispatch(saveRanking(name, score, picture)),
-// });
+const mapDispatchToProps = (dispatch) => ({
+  resetToRestart: () => dispatch(resetStateToRestart()),
+});
 
 const mapStateToProps = (state) => ({
   player: state.playerReducer,
 });
 
 Ranking.propTypes = {
-  // rankingToState: PropTypes.func.isRequired,
+  resetToRestart: PropTypes.func.isRequired,
   player: PropTypes.shape({
     name: PropTypes.string,
     score: PropTypes.number,
@@ -70,4 +75,4 @@ Ranking.propTypes = {
   }).isRequired,
 };
 
-export default connect(mapStateToProps)(Ranking);
+export default connect(mapStateToProps, mapDispatchToProps)(Ranking);
