@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { changeQuestionsIndex, nextQuestion } from '../actions';
 
@@ -19,6 +20,8 @@ class NextQuestionBtn extends Component {
   }
 
   render() {
+    const { questionIndex } = this.props;
+    if (questionIndex >= 4) return <Link to="/feedback"><button type="button" data-testid="btn-next" onClick={this.onClickHandler}>Próxima</button></Link>;
     return (
       <div>
         <button type="button" data-testid="btn-next" onClick={this.onClickHandler}>Próxima</button>

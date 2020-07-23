@@ -17,13 +17,18 @@ class Time extends React.Component {
     this.timeManagement();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const { setIntervalId } = this.state;
-    const { time, isAnswerClicked, dispatchButtonClick } = this.props;
+    const {
+      time, isAnswerClicked, dispatchButtonClick, questionIndex,
+    } = this.props;
     if (time <= 0 || isAnswerClicked) {
       clearInterval(setIntervalId);
       console.log('clearInterval done');
       dispatchButtonClick();
+    }
+    if (questionIndex > prevProps.questionIndex) {
+      this.timeManagement();
     }
   }
 
@@ -47,6 +52,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => ({
   time: state.timerReducer.time,
   isAnswerClicked: state.timerReducer.isAnswerClicked,
+  questionIndex: state.questionsReducer.questionIndex,
 });
 
 Time.propTypes = {
@@ -54,6 +60,7 @@ Time.propTypes = {
   time: PropTypes.number.isRequired,
   isAnswerClicked: PropTypes.bool.isRequired,
   dispatchButtonClick: PropTypes.func.isRequired,
+  questionIndex: PropTypes.number.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Time);
