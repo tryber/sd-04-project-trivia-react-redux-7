@@ -4,21 +4,18 @@ import PropTypes from 'prop-types';
 
 class GameHeader extends Component {
   render() {
-    const {
-      name, score, avatarUrl, questionIndex,
-    } = this.props;
+    const { name, score, avatarUrl, questionIndex } = this.props;
     return (
       <div className="game-header">
         <img src={`${avatarUrl}`} alt="/" data-testid="header-profile-picture" />
         <div className="game-header-name" data-testid="header-player-name">
           {`Player Name: ${name}`}
         </div>
-        <div className="game-header-score" data-testid="header-score">
-          {`Score: ${score}`}
+        <div className="game-header-score">
+          Score:
+          <span data-testid="header-score">{score}</span>
         </div>
-        <div>
-          {`index: ${questionIndex}`}
-        </div>
+        <div>{`index: ${questionIndex}`}</div>
       </div>
     );
   }
