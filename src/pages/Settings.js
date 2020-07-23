@@ -1,5 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-const Settings = () => <div data-testid="settings-title">Settings</div>;
+class Settings extends Component {
+  render() {
+    return (
+      <div data-testid="settings-title">Settings
+      </div>
+    );
+  }
+}
 
 export default Settings;
