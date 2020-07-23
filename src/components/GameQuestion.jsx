@@ -1,37 +1,77 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { requestQuestions, addAssertions } from '../actions'; // actionCreate retorna uma tunk
+import {
+  requestQuestions, addAssertions, clickedButton, scoreSum,
+} from '../actions'; // actionCreate retorna uma tunk
+import NextQuestionBtn from './NextQuestionBtn';
 
 class GameQuestion extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      isAnswerClicked: false,
-      correctBorder: { border: '' },
-      incorrectBorder: { border: '' },
-    };
     this.renderCategoryText = this.renderCategoryText.bind(this);
     this.renderQuestionText = this.renderQuestionText.bind(this);
     this.shuffleAnswer = this.shuffleAnswer.bind(this);
     this.clickedAnswer = this.clickedAnswer.bind(this);
-    this.countAssertions = this.countAssertions.bind(this);
+    this.sumScore = this.sumScore.bind(this);
+    this.countAssertionsAndSumScore = this.countAssertionsAndSumScore.bind(this);
   }
 
   componentDidMount() {
-    const { token, getQuestions } = this.props;
+    const {
+      token, getQuestions, player: {
+        name, assertions, score, email,
+      },
+    } = this.props;
+    const playerObj = {
+      player: {
+        name,
+        assertions,
+        score,
+        gravatarEmail: email,
+      },
+    };
     localStorage.setItem('token', token);
+    localStorage.setItem('state', JSON.stringify(playerObj));
     getQuestions(token);
   }
 
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.isAnswerClicked) return true;
+    if (nextProps.timer <= 28) return false;
+    return true;
+  }
+
+  componentDidUpdate() {
+    const {
+      player: {
+        name, assertions, score, email,
+      },
+    } = this.props;
+    const playerObj = {
+      player: {
+        name,
+        assertions,
+        score,
+        gravatarEmail: email,
+      },
+    };
+    localStorage.setItem('state', JSON.stringify(playerObj));
+    const now = JSON.parse(localStorage.getItem('state'));
+    console.log(now.player.score);
+  }
+
   shuffleAnswer() {
-    const { dataQuestion } = this.props;
-    const { correct_answer, incorrect_answers } = dataQuestion[0];
+    const { dataQuestion, questionIndex } = this.props;
+    // eslint-disable-next-line camelcase
+    const { correct_answer, incorrect_answers } = dataQuestion[questionIndex];
+    // eslint-disable-next-line camelcase
     const allAnswers = [correct_answer, ...incorrect_answers];
 
-    let currentIndex = allAnswers.length; let temporaryValue; let
-      randomIndex;
+    let currentIndex = allAnswers.length;
+    let temporaryValue;
+    let randomIndex;
 
     // While there remain elements to shuffle...
     while (currentIndex !== 0) {
@@ -48,58 +88,71 @@ class GameQuestion extends Component {
     return allAnswers;
   }
 
-  countAssertions(name) {
+  sumScore() {
+    const {
+      dataQuestion, calculateScore, timer, questionIndex,
+    } = this.props;
+    const { difficulty } = dataQuestion[questionIndex];
+    switch (difficulty) {
+      case 'easy':
+        calculateScore(timer, 1);
+        break;
+      case 'medium':
+        calculateScore(timer, 2);
+        break;
+      case 'hard':
+        calculateScore(timer, 3);
+        break;
+      default:
+        break;
+    }
+  }
+
+  countAssertionsAndSumScore(buttonName) {
     const { sumAssertion } = this.props;
-    if (name !== '') {
+    if (buttonName !== '') {
       sumAssertion();
+      this.sumScore();
     }
   }
 
   clickedAnswer(event) {
     const { name } = event.target;
-    this.setState({
-      isAnswerClicked: true,
-      correctBorder: { border: '3px solid rgb(6, 240, 15)' },
-      incorrectBorder: { border: '3px solid rgb(255, 0, 0)' },
-    });
-    this.countAssertions(name);
+    const { dispatchButtonClick } = this.props;
+    this.countAssertionsAndSumScore(name);
+    dispatchButtonClick();
   }
 
   renderCategoryText() {
-    const { dataQuestion } = this.props;
-    console.log(dataQuestion);
+    const { dataQuestion, questionIndex } = this.props;
 
-    const { category } = dataQuestion[0];
-    console.log(category);
+    const { category } = dataQuestion[questionIndex];
     return (
       <div className="game-question-category">
-        <h2 data-testid="question-category">
-          {category}
-        </h2>
+        <h2 data-testid="question-category">{category}</h2>
       </div>
     );
   }
 
   renderQuestionText() {
-    const { dataQuestion } = this.props;
-    const { question } = dataQuestion[0];
+    const { dataQuestion, questionIndex } = this.props;
+    const { question } = dataQuestion[questionIndex];
     return (
       <div className="game-question-text">
-        <p data-testid="question-text">
-          {question}
-        </p>
+        <p data-testid="question-text">{question}</p>
       </div>
     );
   }
 
   renderAnswerButton() {
-    const { isAnswerClicked, correctBorder, incorrectBorder } = this.state;
-    const { dataQuestion } = this.props;
-    const { correct_answer, incorrect_answers } = dataQuestion[0];
-    console.log(correct_answer, incorrect_answers);
+    const {
+      dataQuestion, isAnswerClicked, questionIndex, correctBorder, incorrectBorder,
+    } = this.props;
+    // eslint-disable-next-line camelcase
+    const { correct_answer } = dataQuestion[questionIndex];
     const ShuffledAllAnswer = this.shuffleAnswer();
-
     const renderBtn = ShuffledAllAnswer.map((answer, index) => {
+      // eslint-disable-next-line camelcase
       if (answer === correct_answer) {
         return (
           <button
@@ -115,21 +168,26 @@ class GameQuestion extends Component {
           </button>
         );
       }
-      return <button key={answer} style={incorrectBorder} disabled={isAnswerClicked} type="button" data-testid={`wrong-answer${index}`} onClick={this.clickedAnswer}>{answer}</button>;
+      return (
+        <button key={answer} style={incorrectBorder} disabled={isAnswerClicked} type="button" data-testid={`wrong-answer${index}`} onClick={this.clickedAnswer}>
+          {answer}
+        </button>
+      );
     });
     return renderBtn;
   }
 
   render() {
-    const { dataQuestion } = this.props;
-    const { assertion } = this.state;
-    console.log('assertions = ', assertion);
+    const { dataQuestion, isAnswerClicked } = this.props;
     if (dataQuestion.length === 0) return <p>loading...</p>;
     return (
       <div className="game-question">
         {this.renderCategoryText()}
         {this.renderQuestionText()}
         {this.renderAnswerButton()}
+        <div>
+          {(isAnswerClicked) && <NextQuestionBtn />}
+        </div>
       </div>
     );
   }
@@ -138,11 +196,21 @@ class GameQuestion extends Component {
 const mapStateToProps = (state) => ({
   dataQuestion: state.questionsReducer.dataQuestions,
   token: state.tokenReducer.dataToken,
+  isAnswerClicked: state.timerReducer.isAnswerClicked,
+  player: state.playerReducer,
+  timer: state.timerReducer.time,
+  isLoading: state.questionsReducer.isLoading,
+  score: state.playerReducer.score,
+  questionIndex: state.questionsReducer.questionIndex,
+  correctBorder: state.timerReducer.correctBorder,
+  incorrectBorder: state.timerReducer.incorrectBorder,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getQuestions: (token) => dispatch(requestQuestions(token)),
   sumAssertion: () => dispatch(addAssertions()),
+  dispatchButtonClick: () => dispatch(clickedButton()),
+  calculateScore: (timer, difficulty) => dispatch(scoreSum(timer, difficulty)),
 });
 
 GameQuestion.defaultProps = {
@@ -154,7 +222,24 @@ export default connect(mapStateToProps, mapDispatchToProps)(GameQuestion);
 GameQuestion.propTypes = {
   token: PropTypes.string.isRequired,
   getQuestions: PropTypes.func.isRequired,
+  isAnswerClicked: PropTypes.bool.isRequired,
+  timer: PropTypes.number.isRequired,
+  dispatchButtonClick: PropTypes.func.isRequired,
+  calculateScore: PropTypes.func.isRequired,
   sumAssertion: PropTypes.func.isRequired,
+  questionIndex: PropTypes.number.isRequired,
+  correctBorder: PropTypes.shape({
+    border: PropTypes.string.isRequired,
+  }).isRequired,
+  incorrectBorder: PropTypes.shape({
+    border: PropTypes.string.isRequired,
+  }).isRequired,
+  player: PropTypes.shape({
+    name: PropTypes.string,
+    assertions: PropTypes.number,
+    score: PropTypes.number,
+    email: PropTypes.string,
+  }).isRequired,
   dataQuestion: PropTypes.arrayOf(
     PropTypes.shape({
       category: PropTypes.string,

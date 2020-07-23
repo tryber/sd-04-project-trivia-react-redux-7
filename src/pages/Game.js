@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import GameHeader from '../components/GameHeader';
 import GameQuestion from '../components/GameQuestion';
-import { Link } from 'react-router-dom';
+import Time from '../components/Time';
 
 class Game extends Component {
   render() {
@@ -11,12 +11,8 @@ class Game extends Component {
     return (
       <div>
         <GameHeader />
+        <Time />
         {isLoading ? 'Loading' : <GameQuestion />}
-        <Link to="/feedback">
-          <button type="button">
-            Feedback
-          </button></Link>
-
       </div>
     );
   }

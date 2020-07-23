@@ -4,16 +4,20 @@ import PropTypes from 'prop-types';
 
 class GameHeader extends Component {
   render() {
-    const { name, score, avatarUrl } = this.props;
-    console.log(name, score, avatarUrl);
+    const {
+      name, score, avatarUrl, questionIndex,
+    } = this.props;
     return (
       <div className="game-header">
-        <img src={`http://${avatarUrl}`} alt="/" data-testid="header-profile-picture" />
+        <img src={`${avatarUrl}`} alt="/" data-testid="header-profile-picture" />
         <div className="game-header-name" data-testid="header-player-name">
           {`Player Name: ${name}`}
         </div>
         <div className="game-header-score" data-testid="header-score">
           {`Score: ${score}`}
+        </div>
+        <div>
+          {`index: ${questionIndex}`}
         </div>
       </div>
     );
@@ -21,8 +25,10 @@ class GameHeader extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  name: state.gravatarReducer.name,
-  avatarUrl: state.gravatarReducer.avatarUrl,
+  name: state.playerReducer.name,
+  avatarUrl: state.playerReducer.avatarUrl,
+  score: state.playerReducer.score,
+  questionIndex: state.questionsReducer.questionIndex,
 });
 
 GameHeader.defaultProps = {
@@ -34,4 +40,5 @@ GameHeader.propTypes = {
   name: PropTypes.string.isRequired,
   score: PropTypes.number,
   avatarUrl: PropTypes.string.isRequired,
+  questionIndex: PropTypes.number.isRequired,
 };
