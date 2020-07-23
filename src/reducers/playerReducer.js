@@ -25,7 +25,7 @@ const playerReducer = (state = INICIAL_STATE, action) => {
     case CALCULATE_SCORE:
       return {
         ...state,
-        score: 10 + (action.timer * action.difficulty),
+        score: state.score + 10 + (action.timer * action.difficulty),
       };
     default:
       return state;
