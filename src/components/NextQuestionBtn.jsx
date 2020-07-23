@@ -21,7 +21,19 @@ class NextQuestionBtn extends Component {
 
   render() {
     const { questionIndex } = this.props;
-    if (questionIndex >= 4) return <Link to="/feedback"><button type="button" data-testid="btn-next" onClick={this.onClickHandler}>Próxima</button></Link>;
+    if (questionIndex >= 4) {
+      return (
+        <Link to="/feedback">
+          <button
+            type="button"
+            data-testid="btn-next"
+            onClick={this.onClickHandler}
+          >
+            Próxima
+          </button>
+        </Link>
+      );
+    }
     return (
       <div>
         <button type="button" data-testid="btn-next" onClick={this.onClickHandler}>Próxima</button>
