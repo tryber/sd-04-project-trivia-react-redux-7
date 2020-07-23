@@ -7,9 +7,8 @@ import GameHeader from '../components/GameHeader';
 
 class Feedback extends Component {
   render() {
-    // const { score } = this.props; // store
-    const assertions = 4; // atualizar depois
-    const score = 5;
+    const { player } = this.props;
+    const { assertions, score } = player;
     return (
       <div>
         <GameHeader />
@@ -34,12 +33,17 @@ class Feedback extends Component {
   }
 }
 
-// const mapStateToProps = (state) => ({
-// score: state.
-// });
+const mapStateToProps = (state) => ({
+  score: state.playerReducer.score,
+  player: state.playerReducer,
+});
 
-export default connect(null, null)(Feedback); // arrumar depois
+
+export default connect(mapStateToProps)(Feedback); // arrumar depois
 
 Feedback.propTypes = {
-  score: PropTypes.number.isRequired,
+  player: PropTypes.shape({
+    assertions: PropTypes.number,
+    score: PropTypes.number,
+  }).isRequired,
 };
