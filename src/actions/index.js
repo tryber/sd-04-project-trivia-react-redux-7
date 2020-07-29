@@ -13,6 +13,7 @@ export const CLICKED_BUTTON = 'CLICKED_BUTTON';
 export const CALCULATE_SCORE = 'CALCULATE_SCORE';
 export const CHANGE_QUESTION_INDEX = 'CHANGE_QUESTION_INDEX';
 export const NEXT_QUESTION = 'NEXT_QUESTION';
+export const RESET_STATE_TO_RESTART = 'RESET_STATE_TO_RESTART';
 const crypto = require('crypto');
 
 export const countdown = () => ({
@@ -99,4 +100,8 @@ export const changeQuestionsIndex = () => ({
 
 export const nextQuestion = () => ({
   type: NEXT_QUESTION,
+});
+
+export const resetStateToRestart = () => ({
+  type: RESET_STATE_TO_RESTART,
 });

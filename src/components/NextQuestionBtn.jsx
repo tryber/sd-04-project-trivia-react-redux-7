@@ -13,7 +13,7 @@ class NextQuestionBtn extends Component {
 
   onClickHandler() {
     const { changeQuestionIndex, questionIndex, resetForNewQuestion } = this.props;
-    if (questionIndex < 4) {
+    if (questionIndex <= 4) {
       resetForNewQuestion();
       changeQuestionIndex();
     }

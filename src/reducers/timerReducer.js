@@ -2,7 +2,6 @@ import { COUNTDOWN, CLICKED_BUTTON, NEXT_QUESTION } from '../actions';
 
 const INITIAL_STATE = {
   time: 30,
-  setIntervalId: '',
   isAnswerClicked: false,
   correctBorder: { border: '' },
   incorrectBorder: { border: '' },
@@ -24,11 +23,7 @@ const timeReducer = (state = INITIAL_STATE, action) => {
       };
     case NEXT_QUESTION:
       return {
-        ...state,
-        isAnswerClicked: false,
-        time: 30,
-        correctBorder: { border: '' },
-        incorrectBorder: { border: '' },
+        ...INITIAL_STATE,
       };
     default:
       return state;

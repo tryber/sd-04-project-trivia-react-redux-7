@@ -3,6 +3,7 @@ import {
   REQUEST_API_SUCCESS_QUESTIONS,
   REQUEST_API_ERROR_QUESTIONS,
   CHANGE_QUESTION_INDEX,
+  RESET_STATE_TO_RESTART,
 } from '../actions';
 
 const INICIAL_STATE = {
@@ -35,6 +36,10 @@ const questionsReducer = (state = INICIAL_STATE, action) => {
       return {
         ...state,
         questionIndex: state.questionIndex + 1,
+      };
+    case RESET_STATE_TO_RESTART:
+      return {
+        ...INICIAL_STATE,
       };
     default:
       return state;

@@ -58,8 +58,6 @@ class GameQuestion extends Component {
       },
     };
     localStorage.setItem('state', JSON.stringify(playerObj));
-    const now = JSON.parse(localStorage.getItem('state'));
-    console.log(now.player.score);
   }
 
   shuffleAnswer() {
